@@ -24,16 +24,20 @@ class Node
 class Tree
 {
   constructor(array){
-    let sortedArray = array.sort();
-    this.root = this.buildTree(sortedArray);
+    //let sortedArray = array.sort();
+    //this.root = this.buildTree(sortedArray);
   }
 
   buildTree(array){
-    
+    const middle = Math.floor(array.length / 2);
+    const left = array.slice(0, middle);
+    const right = array.slice(middle, array.length);
+
+    console.log(left, right)
   }
 }
 
 a = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
-const bst = new Tree(a);
-console.log(bst);
+const bst = new Tree;
+console.log(bst.buildTree(a))
