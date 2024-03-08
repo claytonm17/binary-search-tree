@@ -14,30 +14,38 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 
 class Node
 {
-  constructor(value, leftChild, rightChild){
+  constructor(value){
     this.value = value;
-    this.leftChild = leftChild;
-    this.rightChild = rightChild;
+    this.leftChild = null;
+    this.rightChild = null;
   }
 }
 
 class Tree
 {
   constructor(array){
-    //let sortedArray = array.sort();
-    //this.root = this.buildTree(sortedArray);
+    const sortedArray = Array.from(new Set(array.sort((a, b) => a - b)));
+    this.root = this.buildTree(sortedArray);
   }
 
-  buildTree(array){
-    const middle = Math.floor(array.length / 2);
-    const left = array.slice(0, middle);
-    const right = array.slice(middle, array.length);
+  buildTree(sortedArray)
+  {
+    if (sortedArray.length === 0) return null;
+    console.log(sortedArray);
 
-    console.log(left, right)
+    const middle = Math.floor(sortedArray.length / 2);
+    const left = sortedArray.slice(0, middle);
+    const right = sortedArray.slice(middle + 1);
+
+    const newNode = new Node(sortedArray[middle]);
+    newNode.leftChild = this.buildTree(left);
+    newNode.rightChild = this.buildTree(right);
+
+    return newNode;
   }
 }
 
 a = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
-const bst = new Tree;
-console.log(bst.buildTree(a))
+const bst = new Tree(a);
+console.log(bst.buildTree())
