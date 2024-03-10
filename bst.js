@@ -106,6 +106,18 @@ class Tree
     }
     return current.value;
   }
+
+  find(value, currentNode = this.root)
+  {
+    if (currentNode.value === value) return currentNode;
+
+    if (value < currentNode.value){
+      return this.find(value, currentNode.leftChild);
+    } 
+    else if (value > currentNode.value){
+      return this.find(value, currentNode.rightChild);
+    }
+  }
 }
 
 a = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
@@ -115,3 +127,4 @@ prettyPrint(bst.root)
 bst.insert(17);
 bst.deleteItem(324);
 prettyPrint(bst.root)
+console.log(bst.find(67))
