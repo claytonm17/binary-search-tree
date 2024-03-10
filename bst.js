@@ -109,6 +109,7 @@ class Tree
 
   find(value, currentNode = this.root)
   {
+    if (currentNode === null) return null; // if not in tree
     if (currentNode.value === value) return currentNode;
 
     if (value < currentNode.value){
@@ -117,6 +118,23 @@ class Tree
     else if (value > currentNode.value){
       return this.find(value, currentNode.rightChild);
     }
+  }
+
+  levelOrder(callback)
+  {
+    this.levelOrdered = [];
+    const queue = [];
+
+    if (this.root === null) return; 
+    queue.push(this.root);
+    while (queue.length > 0){
+      const currentNode = queue[0];
+      this.levelOrdered.push(queue[0].value)
+      if (currentNode.leftChild != null) queue.push(currentNode.leftChild);
+      if (currentNode.rightChild != null) queue.push(currentNode.rightChild);
+      queue.shift()
+    }
+    return this.levelOrdered;
   }
 }
 
@@ -127,4 +145,5 @@ prettyPrint(bst.root)
 bst.insert(17);
 bst.deleteItem(324);
 prettyPrint(bst.root)
-console.log(bst.find(67))
+//console.log(bst.find(23))
+console.log(bst.levelOrder())
