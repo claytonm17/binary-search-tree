@@ -52,9 +52,66 @@ class Tree
 
     return newNode;
   }
+
+  insert(value, currentNode = this.root)
+  {
+    if (currentNode === null) return new Node(value);
+    if (currentNode.value === value) return;
+
+    if (currentNode.value < value)
+    {
+      currentNode.rightChild = this.insert(value, currentNode.rightChild);
+    }
+    else
+    {
+      currentNode.leftChild = this.insert(value, currentNode.leftChild);
+    }
+    return currentNode;
+  }
+
+  deleteItem(value, currentNode = this.root)
+  {
+    if (currentNode == null) return currentNode;
+
+    if (value < currentNode.value)
+    {
+      currentNode.leftChild = this.deleteItem(value, currentNode.leftChild);
+    }
+    else if (value > currentNode.value)
+    {
+      currentNode.rightChild = this.deleteItem(value, currentNode.rightChild);
+    } 
+    else
+    {
+      // No child or only one child
+      if (currentNode.leftChild == null) 
+      {
+        return currentNode.rightChild;
+      }
+      else if (currentNode.rightChild == null)
+      {
+        return currentNode.leftChild;
+      }
+
+      // Node with two children
+      currentNode.value = this.minValue(currentNode.rightChild);
+      currentNode.rightChild = this.deleteItem(currentNode.value, currentNode.rightChild);
+    }
+    return currentNode;
+  }
+  minValue(node) {
+    let current = node;
+    while (current.leftChild !== null) {
+      current = current.leftChild;
+    }
+    return current.value;
+  }
 }
 
 a = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
 const bst = new Tree(a);
+prettyPrint(bst.root)
+bst.insert(17);
+bst.deleteItem(324);
 prettyPrint(bst.root)
