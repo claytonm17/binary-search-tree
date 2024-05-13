@@ -12,8 +12,7 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
     }
   };
 
-class Node
-{
+class Node {
   constructor(value){
     this.value = value;
     this.leftChild = null;
@@ -21,15 +20,13 @@ class Node
   }
 }
 
-class Tree
-{
-  constructor(array){
+class Tree {
+  constructor(array) {
     const sortedArray = Array.from(new Set(array.sort((a, b) => a - b)));
     this.root = this.buildTree(sortedArray);
   }
 
-  buildTree(sortedArray)
-  {
+  buildTree(sortedArray) {
     //console.log("Sorted Array:", sortedArray);
     if (sortedArray.length === 0) return null;
 
@@ -53,97 +50,31 @@ class Tree
     return newNode;
   }
 
-  insert(value, currentNode = this.root)
-  {
-    if (currentNode === null) return new Node(value);
-    if (currentNode.value === value) return;
-
-    if (currentNode.value < value)
-    {
-      currentNode.rightChild = this.insert(value, currentNode.rightChild);
-    }
-    else
-    {
-      currentNode.leftChild = this.insert(value, currentNode.leftChild);
-    }
-    return currentNode;
-  }
-
-  deleteItem(value, currentNode = this.root)
-  {
-    if (currentNode == null) return currentNode;
-
-    if (value < currentNode.value)
-    {
-      currentNode.leftChild = this.deleteItem(value, currentNode.leftChild);
-    }
-    else if (value > currentNode.value)
-    {
-      currentNode.rightChild = this.deleteItem(value, currentNode.rightChild);
-    } 
-    else
-    {
-      // No child or only one child
-      if (currentNode.leftChild == null) 
-      {
-        return currentNode.rightChild;
+  insert(value, root = this.root) {
+    if (root === null) {
+      return new Node(value);
+    } else {
+      // Searching tree
+      if (root.value < value) {
+        root.rightChild = this.insert(value, root.rightChild);
+      } else if (root.value > value) {
+        root.leftChild = this.insert(value, root.leftChild);
+      } else {
+        return null;
       }
-      else if (currentNode.rightChild == null)
-      {
-        return currentNode.leftChild;
-      }
-
-      // Node with two children
-      currentNode.value = this.minValue(currentNode.rightChild);
-      currentNode.rightChild = this.deleteItem(currentNode.value, currentNode.rightChild);
-    }
-    return currentNode;
-  }
-  minValue(node) {
-    let current = node;
-    while (current.leftChild !== null) {
-      current = current.leftChild;
-    }
-    return current.value;
-  }
-
-  find(value, currentNode = this.root)
-  {
-    if (currentNode === null) return null; // if not in tree
-    if (currentNode.value === value) return currentNode;
-
-    if (value < currentNode.value){
-      return this.find(value, currentNode.leftChild);
-    } 
-    else if (value > currentNode.value){
-      return this.find(value, currentNode.rightChild);
+      return root;
     }
   }
 
-  levelOrder(callback)
-  {
-    this.levelOrdered = [];
-    const queue = [];
-
-    if (this.root === null) return; 
-    queue.push(this.root);
-    while (queue.length > 0){
-      const currentNode = queue[0];
-      this.levelOrdered.push(queue[0].value)
-      if (currentNode.leftChild != null) queue.push(currentNode.leftChild);
-      if (currentNode.rightChild != null) queue.push(currentNode.rightChild);
-      queue.shift()
-    }
-    return this.levelOrdered;
-  }
+  
 }
 
-a = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+const a = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+const TREE = new Tree(a);
+TREE.insert(69);
+console.log(prettyPrint(TREE.root));
 
-const bst = new Tree(a);
-prettyPrint(bst.root)
-bst.insert(17);
-bst.deleteItem(324);
-prettyPrint(bst.root)
-//console.log(bst.find(23))
-console.log(bst.levelOrder())
+const b = [1, 6, 8]
+const TREE2 = new Tree(b);
+TREE2.insert(5);
+console.log(prettyPrint(TREE2.root))
