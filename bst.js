@@ -66,12 +66,59 @@ class Tree {
     }
   }
 
-  
+  find(value, root = this.root) {
+    if (root === null || root.value === value) {
+      return root;
+    } 
+    if (value < this.root.value) {
+      return this.find(value, root.leftChild);
+    } 
+    else if (value > this.root.value) {
+      return this.find(value, root.rightChild);
+    }
+    return null;
+  }
+
+  deleteItem(value, root = this.root) {
+    // Base case: if root is null return null
+    if (root === null) {
+      return null;
+    }
+    if (value < root.value) {
+      root.leftChild = this.deleteItem(value, root.leftChild);
+    } else if (value > root.value) {
+      root.rightChild = this.deleteItem(value, root.rightChild);
+    } else { // value = root
+      // 3 cases: 
+      // 1) no children - delete node
+      if (root.leftChild === null && root.rightChild === null) {
+        return null;
+      }
+      // 2) one child - bump up child?
+      if (root.leftChild === null) {
+        return root.rightChild;
+      }
+      if (root.rightChild === null) {
+        return root.leftChild;
+      }
+      // 3) two children 
+      let tempNode = root.rightChild;
+      while (tempNode.leftChild !== null) {
+        tempNode = tempNode.leftChild
+      }
+      root.value = tempNode.value;
+      root.rightChild = this.deleteItem(tempNode.value, root.rightChild);
+    }
+
+    return root;
+  }
 }
 
 const a = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 const TREE = new Tree(a);
 TREE.insert(69);
+console.log(prettyPrint(TREE.root));
+TREE.deleteItem(4);
 console.log(prettyPrint(TREE.root));
 
 const b = [1, 6, 8]
