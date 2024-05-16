@@ -112,6 +112,26 @@ class Tree {
 
     return root;
   }
+
+  levelOrder(root = this.root) {
+    if (root === null) {
+      return [];
+    }
+    let queue = []; //FIFO
+    let orderResult = [];
+    queue.push(root);
+    while (queue.length > 0) {
+      let current = queue.shift();
+      orderResult.push(current.value);
+      if (current.leftChild !== null) {
+        queue.push(current.leftChild);
+      }
+      if (current.rightChild !== null) {
+        queue.push(current.rightChild);
+      }
+    }
+    return orderResult;
+  }
 }
 
 const a = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
@@ -120,8 +140,16 @@ TREE.insert(69);
 console.log(prettyPrint(TREE.root));
 TREE.deleteItem(4);
 console.log(prettyPrint(TREE.root));
-
+console.log(TREE.levelOrder())
+/*
 const b = [1, 6, 8]
 const TREE2 = new Tree(b);
 TREE2.insert(5);
+TREE2.insert(7);
+TREE2.insert(32);
+TREE2.insert(4);
 console.log(prettyPrint(TREE2.root))
+TREE2.deleteItem(1);
+console.log(prettyPrint(TREE2.root))
+console.log(TREE2.levelOrder());
+*/
