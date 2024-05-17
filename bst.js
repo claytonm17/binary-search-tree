@@ -132,6 +132,42 @@ class Tree {
     }
     return orderResult;
   }
+
+  inOrder(root = this.root) {
+    // left -> root -> right
+    if (root === null) {
+      return [];
+    }
+    let results = [];
+    results = results.concat(this.inOrder(root.leftChild));
+    results.push(root.value);
+    results = results.concat(this.inOrder(root.rightChild));
+    return results;
+  }
+
+  preOrder(root = this.root) {
+    // root -> left -> right
+    if (root === null) {
+      return [];
+    }
+    let results = [];
+    results.push(root.value)
+    results = results.concat(this.preOrder(root.leftChild));
+    results = results.concat(this.preOrder(root.rightChild));
+    return results;
+  }
+
+  postOrder(root = this.root) {
+    // left -> right -> root
+    if (root === null) {
+      return [];
+    }
+    let results = [];
+    results = results.concat(this.postOrder(root.leftChild));
+    results = results.concat(this.postOrder(root.rightChild));
+    results.push(root.value);
+    return results;
+  }
 }
 
 const a = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
@@ -141,6 +177,9 @@ console.log(prettyPrint(TREE.root));
 TREE.deleteItem(4);
 console.log(prettyPrint(TREE.root));
 console.log(TREE.levelOrder())
+console.log(TREE.inOrder());
+console.log(TREE.preOrder());
+console.log(TREE.postOrder());
 /*
 const b = [1, 6, 8]
 const TREE2 = new Tree(b);
