@@ -1,3 +1,5 @@
+const { count } = require("console");
+
 // For visualization of results
 const prettyPrint = (node, prefix = "", isLeft = true) => {
     if (node === null) {
@@ -70,10 +72,10 @@ class Tree {
     if (root === null || root.value === value) {
       return root;
     } 
-    if (value < this.root.value) {
+    if (value < root.value) {
       return this.find(value, root.leftChild);
     } 
-    else if (value > this.root.value) {
+    else if (value > root.value) {
       return this.find(value, root.rightChild);
     }
     return null;
@@ -168,18 +170,70 @@ class Tree {
     results.push(root.value);
     return results;
   }
+
+  // Number of edges to a leaf node
+  height(node) {
+    if (node === null) {
+      return -1;
+    } else {
+      const leftHeight = this.height(node.leftChild);
+      const rightHeight = this.height(node.rightChild);
+      return Math.max(leftHeight, rightHeight) + 1
+    }
+  }
+
+  // Number of edges to the tree's root node
+  depth(node, root = this.root, level = 0) {
+    /*console.log("Checking node:", node ? node.value : null);
+    console.log("Current root:", root ? root.value : null);
+    console.log("Current level:", level);
+    console.log()*/
+
+    if (!node) {
+      return null;
+    }
+    if (root === null) {
+      return 0;
+    } 
+    // If value of root == target node
+    if (root.value === node.value) {
+      //console.log("found node:", node.value)
+      return level;
+    }
+    // search tree and increase level as you go
+    let countLeft = this.depth(node, root.leftChild, level + 1);
+    let countRight = this.depth(node, root.rightChild, level + 1);
+    
+    // Choose the maximum depth from left and right subtrees
+    if (countLeft !== null && countRight !== null) {
+        return Math.max(countLeft, countRight);
+    } else if (countLeft !== null) {
+        return countLeft;
+    } else {
+        return countRight;
+    }
+  } 
+
+  isBalanced() {
+
+  }
 }
+
 
 const a = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 const TREE = new Tree(a);
 TREE.insert(69);
+//console.log(prettyPrint(TREE.root));
 console.log(prettyPrint(TREE.root));
-TREE.deleteItem(4);
-console.log(prettyPrint(TREE.root));
+/*
 console.log(TREE.levelOrder())
 console.log(TREE.inOrder());
 console.log(TREE.preOrder());
 console.log(TREE.postOrder());
+console.log(TREE.height(TREE.find(67)));
+*/
+console.log()
+console.log(TREE.depth(TREE.find(69)));
 /*
 const b = [1, 6, 8]
 const TREE2 = new Tree(b);
