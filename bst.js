@@ -1,5 +1,3 @@
-const { count } = require("console");
-
 // For visualization of results
 const prettyPrint = (node, prefix = "", isLeft = true) => {
     if (node === null) {
@@ -214,35 +212,64 @@ class Tree {
     }
   } 
 
-  isBalanced() {
+  isBalanced(node = this.root) {
+    // balanced tree = difference of heights of left and right subtree 
+    // of every node is not more than 1
+    if (node === null) {
+      return true;
+    }
+    const leftHeight = this.height(node.leftChild);
+    const rightHeight = this.height(node.rightChild);
 
+    if (Math.abs(leftHeight - rightHeight) > 1) {
+      return false;
+    }
+
+    return this.isBalanced(node.leftChild) && this.isBalanced(node.rightChild);
+  }
+
+  rebalance() {
+    const inOrder = this.inOrder();
+    this.root = this.buildTree(inOrder);
   }
 }
 
+// Testing
+array = [13, 17, 38, 57, 7, 10, 18];
 
-const a = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-const TREE = new Tree(a);
-TREE.insert(69);
-//console.log(prettyPrint(TREE.root));
-console.log(prettyPrint(TREE.root));
-/*
-console.log(TREE.levelOrder())
-console.log(TREE.inOrder());
-console.log(TREE.preOrder());
-console.log(TREE.postOrder());
-console.log(TREE.height(TREE.find(67)));
-*/
-console.log()
-console.log(TREE.depth(TREE.find(69)));
-/*
-const b = [1, 6, 8]
-const TREE2 = new Tree(b);
-TREE2.insert(5);
-TREE2.insert(7);
-TREE2.insert(32);
-TREE2.insert(4);
-console.log(prettyPrint(TREE2.root))
-TREE2.deleteItem(1);
-console.log(prettyPrint(TREE2.root))
-console.log(TREE2.levelOrder());
-*/
+const bst = new Tree(array);
+
+if (bst.isBalanced()) {
+  console.log("Binary Search Tree Balanced:");
+  prettyPrint(bst.root);
+  console.log(`Level Order:\n${bst.levelOrder()}\n`);
+  console.log(`Pre Order:\n${bst.preOrder()}\n`);
+  console.log(`Post Order:\n${bst.postOrder()}\n`);
+  console.log(`In Order:\n${bst.inOrder()}\n`);
+
+  const numsToAdd = 10;
+  for (let i = 0; i < numsToAdd; i++) {
+    const num = Math.round(Math.random() * 100);
+    bst.insert(num);
+  }
+  prettyPrint(bst.root);
+
+  if (bst.isBalanced()) {
+    console.log("Tree is BALANCED");
+  } 
+  else {
+    console.log("Tree is UNBALANCED\n");
+    bst.rebalance();
+    prettyPrint(bst.root);
+    if (bst.isBalanced()) {
+      console.log("Tree is now balanced :)");
+      console.log(`Level Order:\n${bst.levelOrder()}\n`);
+      console.log(`Pre Order:\n${bst.preOrder()}\n`);
+      console.log(`Post Order:\n${bst.postOrder()}\n`);
+      console.log(`In Order:\n${bst.inOrder()}\n`);
+    }
+  }
+} else {
+  console.log("Binary Search Tree NOT Balanced:");
+  prettyPrint(bst.root);
+}
